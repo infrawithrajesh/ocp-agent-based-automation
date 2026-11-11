@@ -1,0 +1,39 @@
+# Copy to config/cluster.yaml and edit. This is the ONLY file you fill in
+# (plus .env and pull-secret.json).
+
+cluster:
+  name: ocp422                     # -> api.ocp422.lab.example.com
+  base_domain: lab.example.com
+  version: stable-4.22             # or an exact z-stream, e.g. 4.22.3
+  api_vip: 10.10.20.5              # floating VIP: in-cluster keepalived + haproxy
+  ingress_vip: 10.10.20.6          # floating VIP: in-cluster keepalived -> routers
+
+network:
+  machine_cidr: 10.10.20.0/24      # node IPs and both VIPs must be inside this
+  gateway: 10.10.20.1
+  dns_servers: [10.10.10.10]       # Infoblox DNS members the nodes will query
+  ntp_servers: [10.10.10.20]
+  vlan_id: null                    # set e.g. 120 if the node port is a tagged trunk
+  cluster_cidr: 10.128.0.0/14
+  host_prefix: 23
+  service_cidr: 172.30.0.0/16
+
+bastion:
+  iso_host: 10.10.20.250           # IP of THIS machine, reachable from every BMC
+  iso_port: 8080
+
+vault:
+  mount: secret                    # KV v2 mount
+  bmc_path: "baremetal/{name}"     # {name} = node name; secret keys: username, password
+
+infoblox:
+  dns_view: default
+  ttl: 300
+
+nodes:
+  - {name: master-0, role: master, ip: 10.10.20.11, mac: "aa:bb:cc:00:00:11", bmc: 10.10.30.11, interface: eno1, root_device: /dev/sda}
+  - {name: master-1, role: master, ip: 10.10.20.12, mac: "aa:bb:cc:00:00:12", bmc: 10.10.30.12, interface: eno1, root_device: /dev/sda}
+  - {name: master-2, role: master, ip: 10.10.20.13, mac: "aa:bb:cc:00:00:13", bmc: 10.10.30.13, interface: eno1, root_device: /dev/sda}
+  - {name: worker-0, role: worker, ip: 10.10.20.21, mac: "aa:bb:cc:00:00:21", bmc: 10.10.30.21, interface: eno1, root_device: /dev/sda}
+  - {name: worker-1, role: worker, ip: 10.10.20.22, mac: "aa:bb:cc:00:00:22", bmc: 10.10.30.22, interface: eno1, root_device: /dev/sda}
+  - {name: worker-2, role: worker, ip: 10.10.20.23, mac: "aa:bb:cc:00:00:23", bmc: 10.10.30.23, interface: eno1, root_device: /dev/sda}

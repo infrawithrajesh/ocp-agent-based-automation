@@ -1,0 +1,8 @@
+.env
+pull-secret.json
+config/cluster.yaml
+work/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
